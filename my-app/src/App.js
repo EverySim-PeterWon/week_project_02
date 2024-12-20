@@ -7,6 +7,7 @@ import WorkBench from "./pages/WorkBench";
 import Result from "./pages/SimResult";
 import { MenuBarMain } from "./MenuBar";
 import { MenuProvider } from "./MenuState";
+import ProjectList from "./components/dbList";
 
 function App() {
   const [isOpenProject, setIsOpenProject] = useState(true);
@@ -23,6 +24,7 @@ function App() {
         />
         <div>
           <Routes>
+            <Route path="/test_page" element={<ProjectList />} />
             <Route path="/home" element={<Home />} />
             <Route
               path="/new_project"
