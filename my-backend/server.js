@@ -1,54 +1,41 @@
-const express = require("express");
-const cors = require("cors");
-const { Pool } = require("pg"); // PostgreSQL인 경우
+import express from "express";
+import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 
 const app = express();
-app.use(cors());
+const prisma = new PrismaClient();
+
+app.use(
+  cors({
+    // frontend domain
+    origin: "http://localhost:3000",
+  })
+);
 app.use(express.json());
 
+// GET: 모든 프로젝트 목록 가져오기
+app.get("/projects", async (req, res) => {
+  try {
+    const projects = await prisma.project.findMany({
+      include: {
+        vertices: true,
+        elements: true,
+      },
+    });
+    res.json(projects);
+  } catch (err) {
+    console.error("Database query error:", err);
+    res.status(500).json({ error: "An unexpected error occurred." });
+  }
+});
+
 const PORT = 4000;
+app.listen(PORT, () =>
+  console.log(`Server is running on http://localhost:${PORT}`)
+);
 
-// PostgreSQL 연결 설정
-const pool = new Pool({
-  host: "localhost",
-  port: 5432,
-  user: "postgres",
-  password: "8090",
-  database: "mydb",
-});
-
-// 간단 테스트 라우트, 나중에 어떤  것을 불러와서 실행할지를 여기에서 설정함
-app.get("/", (req, res) => {
-  res.send("Hello from Express Backend");
-});
-
-// 예시: 유저 생성 (INSERT)
-app.post("/api/users", async (req, res) => {
-  const { name, email } = req.body;
-
-  try {
-    const result = await pool.query(
-      "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id",
-      [name, email]
-    );
-    res.json({ success: true, insertId: result.rows[0].id });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Database insertion failed" });
-  }
-});
-
-// 예시: 유저 목록 조회 (SELECT)
-app.get("/api/users", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM users");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
+process.on("SIGINT", async () => {
+  await prisma.$disconnect();
+  console.log("Prisma Client disconnected");
+  process.exit(0);
 });
