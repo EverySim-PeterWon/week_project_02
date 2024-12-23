@@ -5,11 +5,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleNewClick = () => {
-    navigate("/new_project");
+    navigate("/new-project");
   };
 
   const handleLoadClick = () => {
-    navigate("/load_project");
+    navigate("/load-project");
   };
 
   return (

@@ -9,7 +9,7 @@ const WorkBench = () => {
 
   const [isVertexOpen, setIsVertexOpen] = useState(false);
   const [isElementOpen, setIsElementOpen] = useState(false);
-  const [execute, setExecute] = useState(false);
+  // const [execute, setExecute] = useState(false);
 
   const openVerticesModal = () => {
     setIsVertexOpen(true);

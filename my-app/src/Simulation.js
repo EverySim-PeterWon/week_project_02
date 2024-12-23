@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-function SimExec() {
+export function SimExec() {
   useEffect(() => {
     const scriptCore = document.createElement("script");
     scriptCore.src = "https://pyscript.net/releases/2024.4.1/core.js";
@@ -24,5 +24,3 @@ function SimExec() {
     </div>
   );
 }
-
-export default SimExec;

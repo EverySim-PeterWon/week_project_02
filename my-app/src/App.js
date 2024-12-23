@@ -4,10 +4,9 @@ import Home from "./pages/Home";
 import NewProject from "./pages/NewProject";
 import LoadProject from "./pages/LoadProject";
 import WorkBench from "./pages/WorkBench";
-import Result from "./pages/SimResult";
-import { MenuBarMain } from "./MenuBar";
-import { MenuProvider } from "./MenuState";
-import ProjectList from "./components/dbList";
+import { Result } from "./pages/Result";
+import { MenuBarMain } from "./pages/MenuBar";
+import { MenuProvider, ProjectIdProvider } from "./MenuState";
 
 function App() {
   const [isOpenProject, setIsOpenProject] = useState(true);
@@ -15,30 +14,31 @@ function App() {
 
   return (
     <BrowserRouter>
-      <MenuProvider>
-        <MenuBarMain
-          isOpenProject={isOpenProject}
-          setIsOpenProject={setIsOpenProject}
-          isOpenResult={isOpenResult}
-          setIsOpenResult={setIsOpenResult}
-        />
-        <div>
-          <Routes>
-            <Route path="/test_page" element={<ProjectList />} />
-            <Route path="/home" element={<Home />} />
-            <Route
-              path="/new_project"
-              element={<NewProject setIsOpenProject={setIsOpenProject} />}
-            />
-            <Route
-              path="/load_project"
-              element={<LoadProject setIsOpenProject={setIsOpenProject} />}
-            />
-            <Route path="/workbench" element={<WorkBench />} />
-            <Route path="/simulation_result" element={<Result />} />
-          </Routes>
-        </div>
-      </MenuProvider>
+      <ProjectIdProvider>
+        <MenuProvider>
+          <MenuBarMain
+            isOpenProject={isOpenProject}
+            setIsOpenProject={setIsOpenProject}
+            isOpenResult={isOpenResult}
+            setIsOpenResult={setIsOpenResult}
+          />
+          <div>
+            <Routes>
+              <Route path="/home" element={<Home />} />
+              <Route
+                path="/new-project"
+                element={<NewProject setIsOpenProject={setIsOpenProject} />}
+              />
+              <Route
+                path="/load-project"
+                element={<LoadProject setIsOpenProject={setIsOpenProject} />}
+              />
+              <Route path="/workbench" element={<WorkBench />} />
+              <Route path="/result" element={<Result />} />
+            </Routes>
+          </div>
+        </MenuProvider>
+      </ProjectIdProvider>
     </BrowserRouter>
   );
 }

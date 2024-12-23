@@ -5,15 +5,29 @@ import {
   SetNewProjectData,
   CurrentProjectUpdate,
 } from "../LocalStorageManage";
+import { fetchProjects } from "../api/projectApi";
+
+const newProjectObject = {
+  id: 0,
+  name: "name",
+  createAt: 0,
+  updateAt: 0,
+};
+
+// const newId = ProjectIdArray();
+// console.log(newId);
 
 function NewProject({ setIsOpenProject }) {
   const navigate = useNavigate();
 
+  const [projects, setProjects] = useState([]);
+  const [dbLoad, setDbLoad] = useState(true);
   const [projectId] = useState(() => ProjectIdAuto());
   const [projectName, setProjectName] = useState("");
 
   // Checking the vacant of input
   const [isVacant, setIsVacant] = useState(true);
+  // const [projectIds, setProjectIds] = useState([]);
 
   // Define action when click "BACK" button
   const handleBackClick = () => {
@@ -45,16 +59,12 @@ function NewProject({ setIsOpenProject }) {
     <div>
       <form onSubmit={handleSubmit}>
         <button onClick={handleBackClick}>BACK</button>
-
         <h1>NEW PROJECT</h1>
-
         {isVacant && <p style={{ color: "red" }}>FILL THE NAME!</p>}
-
         <div style={{ display: "flex", alignItems: "center" }}>
           <label htmlFor="inputid">PROJECT ID</label>
           <input id="inputid" type="number" value={projectId} disabled />
         </div>
-
         <div style={{ display: "flex", alignItems: "center" }}>
           <label htmlFor="inputProjName">PROJECT NAME</label>
           <input
