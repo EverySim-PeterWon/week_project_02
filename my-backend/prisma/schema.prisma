@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id         Int      @id @default(autoincrement())
+  name       String
+  createAt   Int
+  updateAt   Int
+  vertices   Vertex[]
+  elements   Element[]
+}
+
+model Vertex {
+  pid       Int       @id @default(autoincrement())
+  projectid Int
+  x         Float
+  y         Float
+  z         Float
+  project   Project @relation(fields: [projectid], references: [id], onDelete: Cascade)
+  elements  Element[]
+}
+
+model Element {
+  eid       Int       @id @default(autoincrement())
+  projectid Int
+  type      String
+  project   Project @relation(fields: [projectid], references: [id], onDelete: Cascade)
+  vertices  Vertex[]
+}
