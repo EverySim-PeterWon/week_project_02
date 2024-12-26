@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import sys
 
 # 초기 조건 설정
 def initial_conditions(nx, x_start, x_end):
@@ -21,7 +23,7 @@ def compute_flux(rho, u, p, gamma):
     return np.array([F1, F2, F3])
 
 # 시간 전진 (Lax-Friedrichs scheme)
-def lax_friedrichs(nx, nt, dx, dt, gamma, rho, u, p):
+def lax_friedrichs(nt, dx, dt, gamma, rho, u, p):
     for t in range(nt):
         # 보존 변수 U 계산
         E = p / (gamma - 1) + 0.5 * rho * u**2
@@ -40,14 +42,14 @@ def lax_friedrichs(nx, nt, dx, dt, gamma, rho, u, p):
 
     return rho, u, p
 
-# 메인 프로그램
-def main():
+
+def main(projectId):
     # 도메인 및 파라미터 설정
     nx = 100          # 공간 격자 수
     nt = 1000          # 시간 스텝 수
     x_start = 0.0     # 도메인 시작
     x_end = 1.0       # 도메인 끝
-    dx = (x_end - x_start) / nx
+    dx = (x_end - x_start) / nx # 공간 간격(정렬 격자)
     dt = 0.001        # 시간 간격
     gamma = 1.4       # 기체 비열비
 
@@ -55,7 +57,8 @@ def main():
     x, rho, u, p = initial_conditions(nx, x_start, x_end)
 
     # Euler 방정식 풀기
-    rho, u, p = lax_friedrichs(nx, nt, dx, dt, gamma, rho, u, p)
+    rho, u, p = lax_friedrichs(nt, dx, dt, gamma, rho, u, p)
+
 
     # 결과 플롯
     plt.close('all')
@@ -67,7 +70,17 @@ def main():
     plt.title('1D Euler Equations (Lax-Friedrichs Scheme)')
     plt.legend()
     plt.grid()
-    plt.show()
+
+    if not os.path.exists("png"):
+        os.makedirs("png")
+    
+    file_path = os.path.join(os.curdir, "png", str(projectId) + "_plot.png")
+    plt.savefig(file_path)
+    plt.close()
+
+    print(file_path)
+    return None
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
+    
