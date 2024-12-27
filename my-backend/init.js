@@ -7,8 +7,8 @@ const prisma = new PrismaClient();
     await prisma.project.create({
       data: {
         name: "test_01",
-        createAt: 1,
-        updateAt: 1,
+        createAt: new Date(),
+        updateAt: new Date(),
         vertices: {
           create: [{ x: 1.0, y: 2.0, z: 3.0 }],
         },

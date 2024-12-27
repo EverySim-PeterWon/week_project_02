@@ -1,33 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ProjectIdAuto,
-  SetNewProjectData,
-  CurrentProjectUpdate,
-} from "../LocalStorageManage";
 import { fetchProjects } from "../api/projectApi";
+import { ProjectIdAuto, SetNewProjectData } from "../components/newProjectDb";
 
-const newProjectObject = {
-  id: 0,
-  name: "name",
-  createAt: 0,
-  updateAt: 0,
-};
+// Project 테이블 데이터 가져오기
+const projectData = await fetchProjects();
 
-// const newId = ProjectIdArray();
-// console.log(newId);
-
-function NewProject({ setIsOpenProject }) {
+function NewProject({ setIsOpenProject, setProjectId }) {
   const navigate = useNavigate();
-
-  const [projects, setProjects] = useState([]);
-  const [dbLoad, setDbLoad] = useState(true);
-  const [projectId] = useState(() => ProjectIdAuto());
   const [projectName, setProjectName] = useState("");
+  const projectId = ProjectIdAuto(projectData);
 
   // Checking the vacant of input
   const [isVacant, setIsVacant] = useState(true);
-  // const [projectIds, setProjectIds] = useState([]);
 
   // Define action when click "BACK" button
   const handleBackClick = () => {
@@ -36,10 +21,10 @@ function NewProject({ setIsOpenProject }) {
 
   // Define action when click "MAKE" button
   const handleMakeClick = () => {
-    SetNewProjectData(projectId, projectName);
-    CurrentProjectUpdate(projectId);
+    SetNewProjectData(projectName);
     setIsOpenProject(false);
     navigate("/workbench");
+    setProjectId(projectId);
   };
 
   // Define handle function of input at project name

@@ -5,7 +5,7 @@ import apiClient from "./api";
 export const fetchProjects = async () => {
   try {
     const response = await apiClient.get("/projects");
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error("Failed to fetch project: ", error);
   }
@@ -14,11 +14,20 @@ export const fetchProjects = async () => {
 // Project 생성(POST)
 export const createProject = async (newProject) => {
   try {
-    const response = await apiClient.post("/projects", newProject);
+    await apiClient.post("/projects", newProject);
     console.log("Project created successfully");
-    console.log(response.json());
   } catch (error) {
     console.error("Failed to create project: ", error);
+  }
+};
+
+// Project 가져오기(GET)
+export const getProject = async () => {
+  try {
+    await apiClient.get("/projects");
+    console.log("Project data import finished!");
+  } catch (error) {
+    console.error("Failed to get project: ", error);
   }
 };
 
