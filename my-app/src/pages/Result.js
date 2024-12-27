@@ -7,8 +7,9 @@ export const Result = () => {
   const handleRunSolver = async () => {
     try {
       const data = await runSolver(1);
+      console.log("Solver Response: ", data);
       if (data.success) {
-        const imgUrl = `http://localhost:4000/png/${data.url}`;
+        const imgUrl = `http://localhost:4000/${data.url}`;
         setPlotUrl(imgUrl);
       } else {
         alert("Solver execution failed.");

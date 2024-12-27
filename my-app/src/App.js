@@ -11,6 +11,7 @@ import { MenuProvider, ProjectIdProvider } from "./MenuState";
 function App() {
   const [isOpenProject, setIsOpenProject] = useState(true);
   const [isOpenResult, setIsOpenResult] = useState(true);
+  const [projectId, setProjectId] = useState(null);
 
   return (
     <BrowserRouter>
@@ -27,7 +28,12 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route
                 path="/new-project"
-                element={<NewProject setIsOpenProject={setIsOpenProject} />}
+                element={
+                  <NewProject
+                    setIsOpenProject={setIsOpenProject}
+                    setProjectId={setProjectId}
+                  />
+                }
               />
               <Route
                 path="/load-project"
