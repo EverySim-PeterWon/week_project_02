@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchProjects } from "../api/projectApi";
+import { getProject } from "../api/projectApi";
 import { ProjectIdAuto, SetNewProjectData } from "../components/newProjectDb";
 
 // Project 테이블 데이터 가져오기
-const projectData = await fetchProjects();
+const projectData = await getProject();
 
 function NewProject({ setIsOpenProject, setProjectId }) {
   const navigate = useNavigate();

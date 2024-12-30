@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CurrentProjectUpdate } from "../LocalStorageManage";
+import { ImportProjectData } from "../components/loadProjectDb.js";
 
-function DynamicButtons({ onButtonClick }) {
+function DynamicButtons({ onButtonClick, projectData }) {
   const [buttons, setButtons] = useState([]);
   const [selectedButton, setselectedButton] = useState(null);
 
@@ -58,7 +59,20 @@ function DynamicButtons({ onButtonClick }) {
 function LoadProject({ setIsOpenProject }) {
   const navigate = useNavigate();
   const [disableButton, setDisableButton] = useState(true);
-  const [selectedProject, setSelectedProject] = React.useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [projectData, setProjectData] = useState(null);
+
+  // 비동기 데이터 로드
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await ImportProjectData();
+      console.log(data);
+      console.log(typeof data);
+      setProjectData(data);
+    };
+
+    fetchData();
+  }, []);
 
   const handleBackClick = () => {
     navigate("/home");
@@ -81,7 +95,10 @@ function LoadProject({ setIsOpenProject }) {
     <div>
       <button onClick={handleBackClick}>BACK</button>
       <h1>LOAD PROJECT</h1>
-      <DynamicButtons onButtonClick={handleDynamicButtonClick} />
+      <DynamicButtons
+        onButtonClick={handleDynamicButtonClick}
+        projectData={projectData}
+      />
       <button onClick={handleMakeClick} disabled={disableButton}>
         MAKE PROJECT
       </button>
